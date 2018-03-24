@@ -30,7 +30,7 @@ if(isset($_GET['from']) && isset($_GET['to'])){
 		}		
 }
 
-else(isset($_GET['limit']){
+else if(isset($_GET['limit']){
 	$id=0;
 	foreach($tweets as $tweet){
 		
@@ -49,8 +49,32 @@ else(isset($_GET['limit']){
 		}
 		
 	}
+}
+	else{
+		
+	$id=0;
+	foreach($tweets as $tweet){
+		
+		$id++;	
+		if(	$id <= 5){
+		$tweet_result[$index]['id'] = $tweet->id_str;
+		$tweet_result[$index]['createdAt'] = $tweet->created_at;
+		$tweet_result[$index]['text'] = $tweet->text;
+		$tweet_result[$index]['name'] = $tweet->user->name;
+		$tweet_result[$index]['screen_name'] = $tweet->user->screen_name;
+		$tweet_result[$index]['profileImageurl'] = $tweet->user->profile_image_url;
+		$tweet_result[$index]['favorited'] = $tweet->favorited;
+		$tweet_result[$index]['favorite_count'] = $tweet->favorite_count;
+		$tweet_result[$index]['location'] = $tweet->user->location;
+		$index++;
+		}
+		
+	}
+		
+		
+	}
 
-}	
+	
 
 
 
