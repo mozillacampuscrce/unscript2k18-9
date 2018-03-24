@@ -5,34 +5,38 @@ use Abraham\TwitterOAuth\TwitterOAuth;
 $config = require_once 'config.php';
 session_start();
 
+//header('Location: showtweets.php');
+/*$oauth_verifier = filter_input(INPUT_GET, 'oauth_verifier');
 
-$oauth_verifier = filter_input(INPUT_GET, 'oauth_verifier');
-
-if (empty($oauth_verifier) ||
+$token=$_SESSION['oauth_token'];
+$secret=$_SESSION['oauth_token_secret'];
+//echo $token."    ".$secret;
+/*if (empty($oauth_verifier) ||
     empty($_SESSION['oauth_token']) ||
     empty($_SESSION['oauth_token_secret'])
 ) {
     // something's missing, go and login again
     header('Location: ' . $config['url_login']);
-}
+}*/
 
-// connect with application token
+/*// connect with application token
 $connection = new TwitterOAuth(
     $config['consumer_key'],
     $config['consumer_secret'],
     $_SESSION['oauth_token'],
     $_SESSION['oauth_token_secret']
-);
+);*/
 
 // request user token
-$token = $connection->oauth(
+/*$token = $connection->oauth(
     'oauth/access_token', [
         'oauth_verifier' => $oauth_verifier
     ]
-);
+);*/
 
 
-$_SESSION['token']=$token;
+
+$token=$_SESSION['token'];
 
 
 $twitter = new TwitterOAuth(
@@ -42,9 +46,8 @@ $twitter = new TwitterOAuth(
     $token['oauth_token_secret']
 );
 
-/*
-$data = $twitter->get("account/verify_credentials", ['include_entities' => true, 'skip_status' => true, 'include_email' => true]);
-echo $data->name."";
+
+/*$data = $twitter->get("account/verify_credentials", ['include_entities' => true, 'skip_status' => true, 'include_email' => true]);
 
 $count = 10000;
 $params = array("screen_name"=>$data->screen_name,"count"=>$count);
@@ -59,21 +62,21 @@ $tweets = $twitter->get('statuses/home_timeline',$params);
     $tweet_result[$index]['screen_name'] = $tweet->user->screen_name;
     $tweet_result[$index]['profileImageurl'] = $tweet->user->profile_image_url;
     $index++;
-}
-echo json_encode($tweets);
-*/
-/*
+}*/
+//echo json_encode($tweets);*/
+
+$message=$_POST['mytweet'];
+//echo $message;
 
 $status = $twitter->post(
     "statuses/update", [
-        "status" => "Thank you @nedavayruby, use of this tutorial https://goo.gl/N2Znbb"
+        "status" => $message
     ]
 );
 
 
-
-echo ('Created new status with #' . $status->id . PHP_EOL);*/
-
 header('Location: showtweets.php');
+
+
 
 ?>

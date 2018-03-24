@@ -2,7 +2,7 @@
 if(isset($_GET['bot'])) {
 	
 	
-$file_tweets = file_get_contents("tweets.json");
+$file_tweets = file_get_contents("showtweets.php");
 //json string to array
 $tweets=json_decode($file_tweets, false);
 $tweet_result = array();
@@ -30,7 +30,7 @@ if(isset($_GET['from']) && isset($_GET['to'])){
 		}		
 }
 
-else if(isset($_GET['limit']){
+else if(isset($_GET['limit'])){
 	$id=0;
 	foreach($tweets as $tweet){
 		
@@ -99,27 +99,27 @@ else{
 
 
         <!-- Bootstrap Core CSS -->
-        <link href="../bootstrap/dist/css/bootstrap.css" rel="stylesheet">
+        <link href="bootstrap/dist/css/bootstrap.css" rel="stylesheet">
 
         <!-- Bootstrap Core CSS -->
-        <link href="../bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+        <link href="bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
 
 
  
 
       <!-- jquery -->
-     <script src="../jquery/dist/jquery.js"></script>
+     <script src="jquery/dist/jquery.js"></script>
 
 
              <!-- jquery -->
-             <script src="../jquery/dist/jquery.min.js"></script>
+             <script src="jquery/dist/jquery.min.js"></script>
 
 
        <!-- Bootstrap js -->
-        <script src="../bootstrap/dist/js/bootstrap.min.js"></script>
+        <script src="bootstrap/dist/js/bootstrap.min.js"></script>
 
         <!-- Bootstrap js -->
-        <script src="../bootstrap/dist/js/bootstrap.js"></script>
+        <script src="bootstrap/dist/js/bootstrap.js"></script>
 
 <style>
 
@@ -139,8 +139,12 @@ else{
 
     <div class="container-fluid">
     <br>
-	
- 		<div class="row" id="tweets">
+
+        <input type="text" id="posttext"><input type="button" id="posttweet" value="Post Tweet"><br><br><br>
+        <input type="button" id="showtweets" value="Show Tweet">
+
+
+        <div class="row" id="tweets">
 		
 </div>
  		<!--./row -->
@@ -160,39 +164,99 @@ else{
             //$("#showtweets").click(function(){
 
                 //console.log("on click")
+            $("#showtweets").click(function(){
+
+                console.log("on click")
                 var tweets="";
+                console.log("i am");
 
-                $.getJSON('tweets.json', function(data) {
+                $.ajax({
+                    type:"get",
+                    url: "showtweets.php",
+                    success:function(data)
+                    {
+                        var mydata=JSON.parse(data);
 
-
-                    $.each(data, function(i, f) {
-						var icon=''
-						var hashtag="";
-						for(var i=0;i < f.entities.hashtags.length;i++){
-								hashtag=hashtag+"#"+f.entities.hashtags[i]+" "; 
-						}
-						console.log(f.favourite_count);
-						if(f.favourite_count > 0){
-							var icon='style="border-color:red"';	
-						}
-						else{
-						icon='';
-						}	
+                        $.each(mydata, function(i, f) {
+                            var icon=''
+                            var hashtag="";
+                            for(var i=0;i < f.entities.hashtags.length;i++){
+                                hashtag=hashtag+"#"+f.entities.hashtags[i]+" ";
+                            }
+                            console.log(f.favourite_count);
+                            if(f.favourite_count > 0){
+                                var icon='style="border-color:red"';
+                            }
+                            else{
+                                icon='';
+                            }
                             //console.log(f.id);
                             tweets=tweets+'<div class="col-lg-4"><div class="panel panel-primary" '+icon+'><div class="panel-heading">'+f.user.name+'('+f.user.screen_name+')'+
-										'</div><div class="panel-body" style="height:200px">'+
-											f.text
-										+'</div><div class="panel-footer" style="height:50px">'+
-										
-										hashtag+'</div></div></div>'
-						})
-                    //console.log(tweets);
+                                '</div><div class="panel-body" style="height:200px">'+
+                                f.text
+                                +'</div><div class="panel-footer" style="height:50px">'+
+
+                                hashtag+'</div></div></div>'
+                        })
+                        //console.log(tweets);
                         document.getElementById("tweets").innerHTML=tweets;
-                });
 
+                    }
             });
+        });
 
-        //});
+        $("#posttweet").click(function(){
+
+            var mytweet=$("#posttext").val();
+            console.log(mytweet);
+            var tweets="";
+            console.log("i am");
+
+            $.ajax({
+                type:"post",
+                url: "postmessage.php",
+                data:{
+                    mytweet:mytweet
+                },
+                success:function(response)
+                {
+                    console.log("got data");
+                    var mydata=JSON.parse(response);
+
+                    $.each(mydata, function(i, f) {
+                        var icon=''
+                        var hashtag="";
+                        for(var i=0;i < f.entities.hashtags.length;i++){
+                            hashtag=hashtag+"#"+f.entities.hashtags[i]+" ";
+                        }
+                        console.log(f.favourite_count);
+                        if(f.favourite_count > 0){
+                            var icon='style="border-color:red"';
+                        }
+                        else{
+                            icon='';
+                        }
+                        //console.log(f.id);
+                        tweets=tweets+'<div class="col-lg-4"><div class="panel panel-primary" '+icon+'><div class="panel-heading">'+f.user.name+'('+f.user.screen_name+')'+
+                            '</div><div class="panel-body" style="height:200px">'+
+                            f.text
+                            +'</div><div class="panel-footer" style="height:50px">'+
+
+                            hashtag+'</div></div></div>'
+                    })
+                    console.log(tweets);
+                    document.getElementById("tweets").innerHTML=tweets;
+                }
+            });
+        });
+
+
+
+});
+
+
+
+
 
 </script>
 

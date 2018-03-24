@@ -29,12 +29,12 @@ $_SESSION['oauth_token_secret'] = $request_token['oauth_token_secret'];
 // generate the URL to make request to authorize our application
 $url = $twitteroauth->url(
     'oauth/authorize', [
-        'oauth_token' => $request_token['oauth_token']
+        'oauth_token' => $request_token['oauth_token'],
+        'oauth_token_secret'=>$request_token['oauth_token_secret']
     ]
 );
 
 
 header('Location: '. $url);
-
 
 ?>
