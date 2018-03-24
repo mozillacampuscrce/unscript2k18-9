@@ -33,7 +33,7 @@ $url = $twitteroauth->url(
     ]
 );
 
-// and redirect
+
 header('Location: '. $url);
 
 
