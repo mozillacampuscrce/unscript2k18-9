@@ -1,18 +1,4 @@
 <?php
-
-session_start();
-if(!isset($_SESSION['loggedInUser'])){
-    
-    //send them to login page
-    header('Loction: index.php');
-}
-
-include('includes/connections.php');
-
-
-
-
-
 if(isset($_GET['bot'])) {
 	
 	
@@ -96,7 +82,6 @@ echo json_encode($tweet_result);
 	
 }
 else{
-include_once('includes/header.php');
 ?>	
 
 <!DOCTYPE html >
@@ -110,7 +95,7 @@ include_once('includes/header.php');
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>Tweets</title>
+    <title>Home Page</title>
 
 
         <!-- Bootstrap Core CSS -->
@@ -156,7 +141,7 @@ include_once('includes/header.php');
     <br>
 
         <input type="text" id="posttext"><input type="button" id="posttweet" value="Post Tweet"><br><br><br>
-       <!-- <input type="button" id="showtweets" value="Show Tweet"> -->
+        <input type="button" id="showtweets" value="Show Tweet">
 
 
         <div class="row" id="tweets">
@@ -179,7 +164,7 @@ include_once('includes/header.php');
             //$("#showtweets").click(function(){
 
                 //console.log("on click")
-           
+            $("#showtweets").click(function(){
 
                 console.log("on click")
                 var tweets="";
@@ -196,7 +181,7 @@ include_once('includes/header.php');
                             var icon=''
                             var hashtag="";
                             for(var i=0;i < f.entities.hashtags.length;i++){
-                                hashtag=hashtag+"#"+JSON.stringify(f.entities.hashtags[i].text)+" ";
+                                hashtag=hashtag+"#"+f.entities.hashtags[i]+" ";
                             }
                             console.log(f.favourite_count);
                             if(f.favourite_count > 0){
@@ -206,18 +191,18 @@ include_once('includes/header.php');
                                 icon='';
                             }
                             //console.log(f.id);
-                            tweets=tweets+'<div class="col-lg-4"><div class="panel panel-primary" '+icon+'><div class="panel-heading">'+f.user.name+'(@'+f.user.screen_name+')'+
+                            tweets=tweets+'<div class="col-lg-4"><div class="panel panel-primary" '+icon+'><div class="panel-heading">'+f.user.name+'('+f.user.screen_name+')'+
                                 '</div><div class="panel-body" style="height:200px">'+
                                 f.text
                                 +'</div><div class="panel-footer" style="height:50px">'+
-                               hashtag.replace(/\"/g, "")
-                                +'</div></div></div>'
+
+                                hashtag+'</div></div></div>'
                         })
                         //console.log(tweets);
                         document.getElementById("tweets").innerHTML=tweets;
 
                     }
-            
+            });
         });
 
         $("#posttweet").click(function(){

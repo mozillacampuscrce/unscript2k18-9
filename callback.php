@@ -74,6 +74,6 @@ $status = $twitter->post(
 
 echo ('Created new status with #' . $status->id . PHP_EOL);*/
 
-header('Location: showtweets.php');
+header('Location: viewtwitterposts.php');
 
 ?>
